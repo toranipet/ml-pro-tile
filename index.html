@@ -49,8 +49,8 @@ const CONFIG = {
     { label: "Whole-home renovation",    kind: "remodel" },
     { label: "New flooring install",     kind: "remodel" },
     { label: "Demolition Tile",           kind: "remodel" },
-    { label: "Backsplash",               kind: "price", priceHint: "" }, // ex: "Backsplash installs usually start around $___."
-    { label: "Accent / decorative wall", kind: "price", priceHint: "" },
+    { label: "Backsplash",               kind: "remodel" },
+    { label: "Accent / decorative wall", kind: "remodel" },
     { label: "Tile or floor repair",     kind: "out",   priceHint: "" }, // o "reparo" que ele não quer
     { label: "Something else",           kind: "remodel" },
   ],
@@ -387,13 +387,7 @@ function calendlyEmbed(lead){
     + `&email=${encodeURIComponent(lead.email)}`
     + `&a1=${encodeURIComponent(notes)}`
     + `&hide_gdpr_banner=1`;
-  // load widget script once
-  if(!document.getElementById("cal-js")){
-    const s=document.createElement("script"); s.id="cal-js";
-    s.src="https://assets.calendly.com/assets/external/widget.js"; s.async=true;
-    document.body.appendChild(s);
-  }
-  return `<div class="calendly-inline-widget" data-url="${url}"></div>`;
+  return `<a class="btn btn-amber" href="${url}" target="_blank" rel="noopener" onclick="pushEvent('calendly_click',{})">📅 Book a time</a>`;
 }
 
 function renderResult(r, lead){
@@ -403,16 +397,14 @@ function renderResult(r, lead){
   if(r.outcome === "qualified"){
     html += `<div class="badge hot"><i class="dt"></i>You're a strong fit</div>`;
     html += `<h2>Let's talk — you're exactly who we build for.</h2>`;
-    html += `<p class="lead">A specialist can answer your questions right away. Call now, or pick a time below.</p>`;
+    html += `<p class="lead"><strong>A specialist can answer your questions right away. Call now, or pick a time below.</strong></p>`;
     html += summaryHTML(lead);
     html += `<a class="btn btn-call" href="tel:${CONFIG.phoneHref}" onclick="pushEvent('call_click',{outcome:'qualified'})">📞 Call ${CONFIG.phoneDisplay}</a>`;
     html += `<div class="or">or book a time</div>`;
     html += calendlyEmbed(lead);
   }
   else if(r.outcome === "consult"){
-    html += `<div class="badge warm"><i class="dt"></i>Let's plan it</div>`;
-    html += `<h2>Book your free consultation.</h2>`;
-    html += `<p class="lead">Pick a time that works for you — we'll go over your project and what's possible. No pressure, no obligation.</p>`;
+    html += `<p class="lead"><strong>A specialist can answer your questions right away. Call now, or pick a time below.</strong></p>`;
     html += summaryHTML(lead);
     html += calendlyEmbed(lead);
   }
